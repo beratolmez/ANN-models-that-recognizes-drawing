@@ -1,0 +1,57 @@
+body {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.toolbar {
+  margin-bottom: 10px;
+}
+
+#canvasContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+canvas {
+  image-rendering: pixelated;
+  cursor: crosshair;
+  border: 2px solid black;
+  touch-action: none;
+}
+
+/* Tam ekran modunda canvas container stili */
+#canvasContainer:fullscreen {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+button {
+  margin: 10px 5px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+input[type="range"],
+input[type="color"] {
+  margin-left: 5px;
+  margin-right: 15px;
+}
+
+#fullscreenButton {
+  background-color: #28a745;
+}
+
+#fullscreenButton:hover {
+  background-color: #218838;
+}

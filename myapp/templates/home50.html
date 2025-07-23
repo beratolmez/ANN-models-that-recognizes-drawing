@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Draw 50-Class Test</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2" />
+</head>
+<body>
+  <h1>50-Class Çizim Tahmini (64×64)</h1>
+
+  <div class="toolbar">
+    <label>Kalınlık:</label>
+    <input type="range" id="brushSize" min="20" max="180" value="5"/>
+    <label>Renk:</label>
+    <input type="color" id="brushColor" value="#000000"/>
+  </div>
+  <canvas id="drawingCanvas" width="1000" height="1000"
+          style="border:2px solid black; touch-action: none;"></canvas>
+  <br/>
+  <button id="clearButton">Temizle</button>
+  <button id="saveButton">Kaydet</button>
+
+  <form id="saveForm" method="POST" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="image" id="imageData"/>
+  </form>
+  <script src="{% static 'js/script50.js' %}?v=2"></script>
+
+  {% if saved_image_url %}
+  <hr/>
+  <div style="display:flex; align-items:flex-start; gap:2rem;">
+    <div>
+      <h2>Kaydedilen (280×280)</h2>
+      <img src="{{ saved_image_url }}" style="width:280px;height:280px;border:2px solid #333;" />
+    </div>
+    {% if processed64 %}
+    <div>
+      <h2>Model Girdi (64×64)</h2>
+      <img src="{{ processed64 }}" style="width:128px;height:128px;image-rendering:pixelated;border:1px solid #666;" />
+    </div>
+    {% endif %}
+
+    <!-- OLASILIKLAR YAN BARAĞI -->
+    {% if probabilities50 %}
+    <div style="margin-left:2rem;">
+      <h2>Olasılıklar</h2>
+      <ol>
+        {% for cls, prob in probabilities50 %}
+          <li>{{ cls }}: {{ prob|floatformat:2 }}</li>
+        {% endfor %}
+      </ol>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if prediction50 %}
+    <h3>Tahmin (50 sınıf): <strong>{{ prediction50 }}</strong></h3>
+  {% endif %}
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sketch Generator</title>
+  <link rel="stylesheet" href="{% static 'css/generate.css' %}">
+</head>
+<body>
+  <h1>Rastgele Sketch Oluştur</h1>
+  <form method="post">
+    {% csrf_token %}
+    <label for="class_id">Sınıf:</label>
+    <select name="class_id" id="class_id">
+      {% for cls in classes %}
+        <option value="{{ forloop.counter0 }}">{{ cls }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit">Oluştur</button>
+  </form>
+
+  {% if generated_image %}
+    <div class="result">
+      <h2>Üretilen Sketch:</h2>
+      <img src="{{ generated_image }}" alt="Generated Sketch">
+    </div>
+  {% endif %}
+</body>
+</html>

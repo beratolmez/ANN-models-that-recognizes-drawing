@@ -1,0 +1,70 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quick Draw Test</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=2" />
+</head>
+<body>
+  <h1>MODEL SEÇİNİZ</h1>
+  <form id="saveForm" method="POST">
+    {% csrf_token %}
+    <label for="modelSelect">Model:</label>
+    <select name="model_name" id="modelSelect">
+      {% for m in model_list %}
+        <option value="{{ m }}">{{ m }}</option>
+      {% endfor %}
+    </select>
+    <button type="button" id="showClassesBtn">Sınıfları Göster</button>
+    <div id="classList" style="margin-top:1rem;"></div>
+    <input type="hidden" name="image" id="imageData"/>
+  </form>
+
+  <h1>Çizim Alanı</h1>
+  <div class="toolbar">
+    <label>Kalınlık:</label>
+    <input type="range" id="brushSize" min="10" max="50" value="5"/>
+    <label>Renk:</label>
+    <input type="color" id="brushColor" value="#000000"/>
+    <button id="clearButton">Temizle</button>
+    <button id="saveButton">Kaydet</button>
+    <button id="fullscreenButton">Tam Ekran</button>
+  </div>
+  <div id="canvasContainer">
+    <canvas id="drawingCanvas" width="600" height="400"></canvas>
+  </div>
+
+  <script src="{% static 'js/script.js' %}?v=3"></script>
+
+  {% if saved_image_url %}
+    <hr/>
+    <div style="display:flex; gap:2rem; align-items:flex-start;">
+      <div>
+        <h2>Kaydedilen (280×280)</h2>
+        <img src="{{ saved_image_url }}" alt="Drawing" style="width:280px; height:280px;"/>
+      </div>
+      {% if processed_image_data %}
+      <div>
+        <h2>Önişlenmiş (28×28)</h2>
+        <img src="{{ processed_image_data }}" alt="Processed" style="width:140px; height:140px; image-rendering: pixelated;"/>
+      </div>
+      {% endif %}
+    </div>
+    {% if prediction %}
+      <h3>Tahmin: <strong>{{ prediction }}</strong></h3>
+    {% endif %}
+    <p><a href="{{ saved_image_url }}" download="drawing.png">İndir (PNG)</a></p>
+  {% endif %}
+
+ <div class="generate-buttons">
+    <button id="generatePathBtn1" onclick="window.location.href='/generate'">
+      Resim Olustur
+    </button>
+    <button id="50 Tahmin" onclick="window.location.href='/predict50'">
+      Geniş Ekran
+    </button>
+  </div>
+</body>
+</html>
